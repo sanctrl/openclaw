@@ -100,6 +100,7 @@ export type PluginInspectReport = {
     allowPromptInjection?: boolean;
     allowConversationAccess?: boolean;
     allowModelOverride?: boolean;
+    allowExtraSystemPrompt?: boolean;
     allowedModels: string[];
     hasAllowedModelsConfig: boolean;
   };
@@ -460,6 +461,7 @@ export function buildPluginInspectReport(params: {
       allowPromptInjection: policyEntry?.hooks?.allowPromptInjection,
       allowConversationAccess: policyEntry?.hooks?.allowConversationAccess,
       allowModelOverride: policyEntry?.subagent?.allowModelOverride,
+      allowExtraSystemPrompt: policyEntry?.subagent?.allowExtraSystemPrompt,
       allowedModels: [...(policyEntry?.subagent?.allowedModels ?? [])],
       hasAllowedModelsConfig: policyEntry?.subagent?.hasAllowedModelsConfig === true,
     },

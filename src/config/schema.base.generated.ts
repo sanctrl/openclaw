@@ -23690,6 +23690,12 @@ export const GENERATED_BASE_CONFIG_SCHEMA: BaseConfigSchemaResponse = {
                       description:
                         "Explicitly allows this plugin to request provider/model overrides in background subagent runs. Keep false unless the plugin is trusted to steer model selection.",
                     },
+                    allowExtraSystemPrompt: {
+                      type: "boolean",
+                      title: "Allow Plugin Subagent Extra System Prompts",
+                      description:
+                        "Explicitly allows this plugin to request extra system prompts in background subagent runs. Keep false unless the plugin is trusted to add privileged run instructions.",
+                    },
                     allowedModels: {
                       type: "array",
                       items: {
@@ -23703,7 +23709,7 @@ export const GENERATED_BASE_CONFIG_SCHEMA: BaseConfigSchemaResponse = {
                   additionalProperties: false,
                   title: "Plugin Subagent Policy",
                   description:
-                    "Per-plugin subagent runtime controls for model override trust and allowlists. Keep this unset unless a plugin must explicitly steer subagent model selection.",
+                    "Per-plugin subagent runtime controls for prompt/model trust and allowlists. Keep this unset unless a plugin must explicitly steer subagent prompts or model selection.",
                 },
                 config: {
                   type: "object",
@@ -28310,8 +28316,13 @@ export const GENERATED_BASE_CONFIG_SCHEMA: BaseConfigSchemaResponse = {
     },
     "plugins.entries.*.subagent": {
       label: "Plugin Subagent Policy",
-      help: "Per-plugin subagent runtime controls for model override trust and allowlists. Keep this unset unless a plugin must explicitly steer subagent model selection.",
+      help: "Per-plugin subagent runtime controls for prompt/model trust and allowlists. Keep this unset unless a plugin must explicitly steer subagent prompts or model selection.",
       tags: ["advanced"],
+    },
+    "plugins.entries.*.subagent.allowExtraSystemPrompt": {
+      label: "Allow Plugin Subagent Extra System Prompts",
+      help: "Explicitly allows this plugin to request extra system prompts in background subagent runs. Keep false unless the plugin is trusted to add privileged run instructions.",
+      tags: ["access"],
     },
     "plugins.entries.*.subagent.allowModelOverride": {
       label: "Allow Plugin Subagent Model Override",

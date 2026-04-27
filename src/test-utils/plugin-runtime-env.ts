@@ -1,7 +1,11 @@
 import type { OutputRuntimeEnv } from "openclaw/plugin-sdk/runtime";
 import { vi } from "vitest";
 
-export function createRuntimeEnv(options?: { throwOnExit?: boolean }): OutputRuntimeEnv {
+type RuntimeEnvOptions = {
+  throwOnExit?: boolean;
+};
+
+export function createRuntimeEnv(options?: RuntimeEnvOptions): OutputRuntimeEnv {
   const throwOnExit = options?.throwOnExit ?? true;
   return {
     log: vi.fn(),
@@ -16,16 +20,20 @@ export function createRuntimeEnv(options?: { throwOnExit?: boolean }): OutputRun
   };
 }
 
-// oxlint-disable-next-line typescript/no-unnecessary-type-parameters -- Test helper lets plugin suites ascribe runtime extension shape.
-export function createTypedRuntimeEnv<TRuntime>(options?: { throwOnExit?: boolean }): TRuntime {
-  return createRuntimeEnv(options) as TRuntime;
+export function createTypedRuntimeEnv<TRuntime>(
+  options?: RuntimeEnvOptions,
+  ascribe?: (runtime: OutputRuntimeEnv) => TRuntime,
+): TRuntime {
+  const runtime = createRuntimeEnv(options);
+  return ascribe ? ascribe(runtime) : (runtime as TRuntime);
 }
 
 export function createNonExitingRuntimeEnv(): OutputRuntimeEnv {
   return createRuntimeEnv({ throwOnExit: false });
 }
 
-// oxlint-disable-next-line typescript/no-unnecessary-type-parameters -- Test helper lets plugin suites ascribe runtime extension shape.
-export function createNonExitingTypedRuntimeEnv<TRuntime>(): TRuntime {
-  return createTypedRuntimeEnv<TRuntime>({ throwOnExit: false });
+export function createNonExitingTypedRuntimeEnv<TRuntime>(
+  ascribe?: (runtime: OutputRuntimeEnv) => TRuntime,
+): TRuntime {
+  return createTypedRuntimeEnv<TRuntime>({ throwOnExit: false }, ascribe);
 }
